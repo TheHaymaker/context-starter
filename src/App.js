@@ -1,4 +1,4 @@
-import React, { Component, useContext } from 'react';
+import React, { Component, useContext, useMemo } from 'react';
 import './App.css';
 import { ThemeContext } from './contexts';
 
@@ -34,9 +34,17 @@ const ContextConsumingElement = () => {
   // above in the tree to provide the value for this context.
   const theme = useContext(ThemeContext);
   const styles = theme === 'light' ? { backgroundColor: 'white' } : { backgroundColor: 'grey' };
-  console.log(theme, styles);
 
-  return <button style={styles}>Themeable button</button>;
+  // We can prevent egregious re-rendering if the value of a Context changes often/rapidly
+  // by wrapping return value in useMemo and specifying its dependencies
+  // our component would still re-execute, but React
+  // wouldn't re-render the child tree if all useMemo inputs are the same.
+  return useMemo(
+    () => {
+      return <button style={styles}>Themeable button</button>;
+    },
+    [styles]
+  );
 };
 
 export default App;
