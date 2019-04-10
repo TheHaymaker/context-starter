@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import './App.css';
-
-const ThemeContext = React.createContext('light');
+import { ThemeContext } from './contexts';
 
 class App extends Component {
   render() {
@@ -26,28 +25,11 @@ const NestedElement = ({ children }) => {
   return <div>{children}</div>;
 };
 
-// const ContextConsumingElement = () => {
-//   return (
-//     <ThemeContext.Consumer>
-//       {theme => {
-//         const styles =
-//           theme === 'light' ? { backgroundColor: 'white' } : { backgroundColor: 'grey' };
-//         return <button style={styles}>Themeable button</button>;
-//       }}
-//     </ThemeContext.Consumer>
-//   );
-// };
+const ContextConsumingElement = () => {
+  const theme = useContext(ThemeContext);
+  const styles = theme === 'light' ? { backgroundColor: 'white' } : { backgroundColor: 'grey' };
+  console.log(theme, styles);
+  return <button style={styles}>Themeable button</button>;
+};
 
-class ContextConsumingElement extends React.Component {
-  render() {
-    const theme = this.context;
-    const styles = theme === 'light' ? { backgroundColor: 'white' } : { backgroundColor: 'grey' };
-    return <button style={styles}>Themeable button</button>;
-  }
-}
-
-ContextConsumingElement.contextType = ThemeContext;
-
-// contextType for class declarations
-// App.contextType = ThemeContext
 export default App;
